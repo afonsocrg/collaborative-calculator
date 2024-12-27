@@ -31,6 +31,8 @@ const getMonthlyContribution = (
 };
 
 export const calculateInvestment = (inputs: CalculatorInputs): CalculationResult => {
+  const startDate = inputs.startDate || new Date();
+
   const annualRate = inputs.returnRate / 100;
   const monthlyRate = getMonthlyRate(annualRate, inputs.compoundFrequency)
 
@@ -61,7 +63,8 @@ export const calculateInvestment = (inputs: CalculatorInputs): CalculationResult
       period: month,
       deposit: contribution + (month === 1 ? inputs.startingAmount : 0),
       interest,
-      endingBalance: balance
+      endingBalance: balance,
+      date: new Date(startDate.getFullYear(), startDate.getMonth() + month - 1)
     });
   }
   

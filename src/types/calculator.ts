@@ -10,6 +10,7 @@ export interface CalculatorInputs {
   additionalContribution: number;
   contributionTiming: ContributionTiming;
   contributionFrequency: ContributionFrequency;
+  startDate?: Date;
 }
 
 export interface TimelineEntry {
@@ -17,6 +18,7 @@ export interface TimelineEntry {
   deposit: number;
   interest: number;
   endingBalance: number;
+  date: Date;
 }
 
 export interface CalculationResult {

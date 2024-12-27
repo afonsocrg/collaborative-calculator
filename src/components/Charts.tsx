@@ -61,12 +61,13 @@ export default function Charts({ results }: ChartsProps) {
       period: entry.period,
       startingAmount: results.startingAmount,
       contributions: previousContributions + entry.deposit,
-      interest: previousInterest + entry.interest
+      interest: previousInterest + entry.interest,
+      date: entry.date
     };
   });
 
   const barData = {
-    labels: timelineData.map(entry => `Period ${entry.period}`),
+    labels: timelineData.map(entry => entry.date.toLocaleDateString(undefined, { month: 'short', year: 'numeric' })),
     datasets: [
       {
         label: 'Starting Amount',
