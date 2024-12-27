@@ -73,7 +73,7 @@ export default function TimelineTable({ timeline }: TimelineTableProps) {
           ...entry,
           key: entry.period,
         }))}
-        pagination={{ pageSize: 10 }}
+        pagination={{}}
         scroll={{ x: true }}
       />
     </Card>
