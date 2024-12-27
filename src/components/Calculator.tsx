@@ -10,12 +10,12 @@ import Charts from './Charts';
 
 export default function Calculator() {
   const [startingAmount, setStartingAmount] = useStateTogether<number>('startingAmount', 20000);
-  const [years, setYears] = useStateTogether<number>('years', 10);
+  const [years, setYears] = useStateTogether<number>('years', 25);
   const [returnRate, setReturnRate] = useStateTogether<number>('returnRate', 10);
   const [compoundFrequency, setCompoundFrequency] = useStateTogether<CalculatorInputs['compoundFrequency']>('compoundFrequency', 'annually');
-  const [additionalContribution, setAdditionalContribution] = useStateTogether<number>('additionalContribution', 1000);
-  const [contributionTiming, setContributionTiming] = useStateTogether<CalculatorInputs['contributionTiming']>('contributionTiming', 'end');
-  const [contributionFrequency, setContributionFrequency] = useStateTogether<CalculatorInputs['contributionFrequency']>('contributionFrequency', 'year');
+  const [additionalContribution, setAdditionalContribution] = useStateTogether<number>('additionalContribution', 500);
+  const [contributionTiming, setContributionTiming] = useStateTogether<CalculatorInputs['contributionTiming']>('contributionTiming', 'beginning');
+  const [contributionFrequency, setContributionFrequency] = useStateTogether<CalculatorInputs['contributionFrequency']>('contributionFrequency', 'month');
 
   const inputs: CalculatorInputs = {
     startingAmount,
