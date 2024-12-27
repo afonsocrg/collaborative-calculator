@@ -1,6 +1,20 @@
-import { Form, InputNumber, Select, Tooltip } from 'antd';
-import { DollarSign, Clock, Percent, PlusCircle, Settings, HelpCircle } from 'lucide-react';
-import { CompoundFrequency, ContributionTiming, ContributionFrequency } from '../types/calculator';
+import { InputNumber, InputNumberProps, Select, SelectProps } from "antd";
+import {
+  CompoundFrequency,
+  ContributionFrequency,
+  ContributionTiming,
+} from "../types/calculator";
+
+function formatCurrency(value: number | undefined) {
+  if (value === undefined) {
+    return "";
+  }
+  return new Intl.NumberFormat().format(value);
+}
+
+function parseCurrency(value: string | undefined) {
+  return parseFloat(value!.replace(/\$\s?|(,*)/g, "")) ?? 0;
+}
 
 interface InvestmentFormProps {
   startingAmount: number;
@@ -35,155 +49,112 @@ export default function InvestmentForm({
   contributionFrequency,
   setContributionFrequency,
 }: InvestmentFormProps) {
+  const currencySymbol = "€";
+
+  const selectProps: SelectProps = {
+    variant: "borderless",
+    style: {
+      padding: "0 4px",
+      margin: 0,
+    },
+    labelRender: ({ label }) => <span className="font-bold">{label}</span>,
+  };
+
+  const inputNumberProps: InputNumberProps<number> = {
+    variant: "borderless",
+    size: "small",
+    controls: false,
+    style: {
+      padding: 0,
+      margin: 0,
+      display: "inline-flex",
+      alignItems: "center",
+      fontWeight: "bold",
+    },
+  };
+
+  const currencyInputProps: InputNumberProps<number> = {
+    ...inputNumberProps,
+    formatter: formatCurrency,
+    parser: parseCurrency,
+  };
+
   return (
-    <Form layout="vertical" className="grid grid-cols-1 md:grid-cols-2 gap-6">
-      <Form.Item
-        label={
-          <span className="flex items-center gap-2">
-            <DollarSign className="h-4 w-4" />
-            Starting Amount
-            <Tooltip title="The initial amount you're investing with">
-              <HelpCircle className="h-4 w-4 cursor-help" />
-            </Tooltip>
-          </span>
-        }
-      >
+    <ul>
+      <li>
+        Investing{" "}
         <InputNumber
           value={startingAmount}
-          onChange={value => setStartingAmount(value || 0)}
-          className="w-full"
-          formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          parser={value => parseFloat(value!.replace(/\$\s?|(,*)/g, ''))}
+          onChange={(value) => setStartingAmount(value || 0)}
+          formatter={(value) => value?.toLocaleString() ?? ""}
+          parser={(value) => parseFloat(value!.replace(/\$\s?|(,*)/g, "")) ?? 0}
+          {...currencyInputProps}
         />
-      </Form.Item>
-
-      <Form.Item
-        label={
-          <span className="flex items-center gap-2">
-            <Clock className="h-4 w-4" />
-            Years
-            <Tooltip title="The time period you plan to keep your investment">
-              <HelpCircle className="h-4 w-4 cursor-help" />
-            </Tooltip>
-          </span>
-        }
-      >
+        {currencySymbol + " "}
+        for
         <InputNumber
           value={years}
-          onChange={value => setYears(value || 0)}
-          className="w-full"
+          onChange={(value) => setYears(value || 0)}
           min={1}
-        />
-      </Form.Item>
-
-      <Form.Item
-        label={
-          <span className="flex items-center gap-2">
-            <Percent className="h-4 w-4" />
-            Return Rate (%)
-            <Tooltip title="The expected annual rate of return on your investment">
-              <HelpCircle className="h-4 w-4 cursor-help" />
-            </Tooltip>
-          </span>
-        }
-      >
+          {...inputNumberProps}
+        />{" "}
+        years
+      </li>
+      <li>
+        With an annual interest rate of{" "}
         <InputNumber
           value={returnRate}
-          onChange={value => setReturnRate(value || 0)}
-          className="w-full"
-          step={0.1}
+          onChange={(value) => setReturnRate(value || 0)}
+          min={0}
+          {...inputNumberProps}
         />
-      </Form.Item>
-
-      <Form.Item
-        label={
-          <span className="flex items-center gap-2">
-            <Settings className="h-4 w-4" />
-            Compound Frequency
-            <Tooltip title="How often the interest is calculated and added to your investment">
-              <HelpCircle className="h-4 w-4 cursor-help" />
-            </Tooltip>
-          </span>
-        }
-      >
+        % compounded{" "}
         <Select
           value={compoundFrequency}
-          onChange={value => setCompoundFrequency(value)}
-          className="w-full"
-        >
-          <Select.Option value="annually">Annually</Select.Option>
-          <Select.Option value="semiannually">Semi-annually</Select.Option>
-          <Select.Option value="quarterly">Quarterly</Select.Option>
-          <Select.Option value="monthly">Monthly</Select.Option>
-          <Select.Option value="semimonthly">Semi-monthly</Select.Option>
-          <Select.Option value="biweekly">Bi-weekly</Select.Option>
-          <Select.Option value="weekly">Weekly</Select.Option>
-          <Select.Option value="daily">Daily</Select.Option>
-          <Select.Option value="continuously">Continuously</Select.Option>
-        </Select>
-      </Form.Item>
-
-      <Form.Item
-        label={
-          <span className="flex items-center gap-2">
-            <PlusCircle className="h-4 w-4" />
-            Additional Contribution
-            <Tooltip title="Regular contributions you plan to make to your investment">
-              <HelpCircle className="h-4 w-4 cursor-help" />
-            </Tooltip>
-          </span>
-        }
-      >
+          onChange={(value) => setCompoundFrequency(value)}
+          options={[
+            { value: "annually", label: "annually" },
+            { value: "semiannually", label: "semiannually" },
+            { value: "quarterly", label: "quarterly" },
+            { value: "monthly", label: "monthly" },
+            { value: "semimonthly", label: "semi-monthly" },
+            { value: "biweekly", label: "bi-weekly" },
+            { value: "weekly", label: "weekly" },
+            { value: "daily", label: "daily" },
+            { value: "continuously", label: "continuously" },
+          ]}
+          {...selectProps}
+        />
+      </li>
+      <li>
+        And adding{" "}
         <InputNumber
           value={additionalContribution}
-          onChange={value => setAdditionalContribution(value || 0)}
-          className="w-full"
-          formatter={value => `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-          parser={value => parseFloat(value!.replace(/\$\s?|(,*)/g, ''))}
+          onChange={(value) => setAdditionalContribution(value || 0)}
+          {...currencyInputProps}
         />
-      </Form.Item>
-
-      <div className="space-y-4">
-        <Form.Item 
-          label={
-            <span className="flex items-center gap-2">
-              Contribution Timing
-              <Tooltip title="Whether to make contributions at the beginning or end of each period">
-                <HelpCircle className="h-4 w-4 cursor-help" />
-              </Tooltip>
-            </span>
-          }
-        >
-          <Select
-            value={contributionTiming}
-            onChange={value => setContributionTiming(value)}
-            className="w-full"
-          >
-            <Select.Option value="beginning">Beginning</Select.Option>
-            <Select.Option value="end">End</Select.Option>
-          </Select>
-        </Form.Item>
-
-        <Form.Item 
-          label={
-            <span className="flex items-center gap-2">
-              Contribution Frequency
-              <Tooltip title="How often you'll make additional contributions">
-                <HelpCircle className="h-4 w-4 cursor-help" />
-              </Tooltip>
-            </span>
-          }
-        >
-          <Select
-            value={contributionFrequency}
-            onChange={value => setContributionFrequency(value)}
-            className="w-full"
-          >
-            <Select.Option value="month">Month</Select.Option>
-            <Select.Option value="year">Year</Select.Option>
-          </Select>
-        </Form.Item>
-      </div>
-    </Form>
+        {currencySymbol + " "}
+        at the{" "}
+        <Select
+          value={contributionTiming}
+          onChange={(value) => setContributionTiming(value)}
+          options={[
+            { value: "beginning", label: "beginning" },
+            { value: "end", label: "end" },
+          ]}
+          {...selectProps}
+        />
+        of each{" "}
+        <Select
+          value={contributionFrequency}
+          onChange={(value) => setContributionFrequency(value)}
+          options={[
+            { value: "month", label: "month" },
+            { value: "year", label: "year" },
+          ]}
+          {...selectProps}
+        />
+      </li>
+    </ul>
   );
 }
