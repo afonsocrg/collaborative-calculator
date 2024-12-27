@@ -1,5 +1,4 @@
-import { CopyOutlined } from "@ant-design/icons";
-import { Button, Tooltip } from "antd";
+import { Button, Typography } from "antd";
 import { Calculator as CalculatorIcon } from "lucide-react";
 import {
   useCreateRandomSession,
@@ -13,12 +12,6 @@ export function Header() {
   const leaveSession = useLeaveSession();
   const createRandomSession = useCreateRandomSession();
   const joinUrl = useJoinUrl();
-
-  const copyJoinUrlToClipboard = () => {
-    if (joinUrl) {
-      navigator.clipboard.writeText(joinUrl);
-    }
-  };
 
   return (
     <div className="text-center mb-12">
@@ -36,25 +29,18 @@ export function Header() {
           <p className="mt-2 text-lg text-gray-600">
             Invite your friends to this session with the link below:
           </p>
-          <p className="mt-2 text-sm text-gray-600">
-            <a
+          <p className="mt-2 text-sm max-w-[20rem] mx-auto">
+            <Typography.Link
               href={joinUrl!}
-              className="text-blue-600 hover:underline"
               target="_blank"
               rel="noopener noreferrer"
+              copyable={true}
+              ellipsis={{
+                tooltip: true,
+              }}
             >
               {joinUrl}
-            </a>
-            <span className="ml-2">
-              <Tooltip title="Copy to clipboard" placement="bottom">
-                <Button
-                  shape="circle"
-                  type="text"
-                  icon={<CopyOutlined className="text-gray-600" />}
-                  onClick={copyJoinUrlToClipboard}
-                />
-              </Tooltip>
-            </span>
+            </Typography.Link>
           </p>
           <div className="mt-2">
             <Button color="danger" variant="filled" onClick={leaveSession}>
