@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+#investment-form .ant-typography-edit-content {
+  display: inline-block;
+  position: static;
+}

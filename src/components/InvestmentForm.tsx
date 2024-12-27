@@ -1,19 +1,47 @@
-import { InputNumber, InputNumberProps, Select, SelectProps } from "antd";
+import { Select, SelectProps, Typography } from "antd";
 import {
   CompoundFrequency,
   ContributionFrequency,
   ContributionTiming,
 } from "../types/calculator";
 
+const { Text, Paragraph } = Typography;
+
 function formatCurrency(value: number | undefined) {
   if (value === undefined) {
     return "";
   }
-  return new Intl.NumberFormat().format(value);
+  return new Intl.NumberFormat(undefined, {
+    style: "currency",
+    currency: "EUR",
+  }).format(value);
+}
+
+function formatPercentage(value: number | undefined) {
+  if (value === undefined) {
+    return "";
+  }
+  return `${value}%`;
+}
+
+function formatNumber(value: number | undefined) {
+  if (value === undefined) {
+    return "";
+  }
+  return new Intl.NumberFormat(undefined, {
+    style: "decimal",
+  }).format(value);
 }
 
 function parseCurrency(value: string | undefined) {
-  return parseFloat(value!.replace(/\$\s?|(,*)/g, "")) ?? 0;
+  if (value === undefined) {
+    return 0;
+  }
+  value = value.replace(/[^0-9.]/g, "");
+  if (value === "") {
+    return 0;
+  }
+  return parseFloat(value) ?? 0;
 }
 
 interface InvestmentFormProps {
@@ -49,7 +77,8 @@ export default function InvestmentForm({
   contributionFrequency,
   setContributionFrequency,
 }: InvestmentFormProps) {
-  const currencySymbol = "€";
+  const triggerType: ("text" | "icon")[] = ["text"];
+  const inputClassName = "font-bold cursor-pointer";
 
   const selectProps: SelectProps = {
     variant: "borderless",
@@ -57,58 +86,50 @@ export default function InvestmentForm({
       padding: "0 4px",
       margin: 0,
     },
-    labelRender: ({ label }) => <span className="font-bold">{label}</span>,
-  };
-
-  const inputNumberProps: InputNumberProps<number> = {
-    variant: "borderless",
-    size: "small",
-    controls: false,
-    style: {
-      padding: 0,
-      margin: 0,
-      display: "inline-flex",
-      alignItems: "center",
-      fontWeight: "bold",
-    },
-  };
-
-  const currencyInputProps: InputNumberProps<number> = {
-    ...inputNumberProps,
-    formatter: formatCurrency,
-    parser: parseCurrency,
+    labelRender: ({ label }) => <span className={inputClassName}>{label}</span>,
   };
 
   return (
-    <ul>
-      <li>
+    <div id="investment-form">
+      <Paragraph>
         Investing{" "}
-        <InputNumber
-          value={startingAmount}
-          onChange={(value) => setStartingAmount(value || 0)}
-          formatter={(value) => value?.toLocaleString() ?? ""}
-          parser={(value) => parseFloat(value!.replace(/\$\s?|(,*)/g, "")) ?? 0}
-          {...currencyInputProps}
-        />
-        {currencySymbol + " "}
-        for
-        <InputNumber
-          value={years}
-          onChange={(value) => setYears(value || 0)}
-          min={1}
-          {...inputNumberProps}
-        />{" "}
-        years
-      </li>
-      <li>
+        <Text
+          className={inputClassName}
+          editable={{
+            triggerType,
+            onChange: (value) => setStartingAmount(parseCurrency(value)),
+            enterIcon: null,
+          }}
+        >
+          {formatCurrency(startingAmount)}
+        </Text>{" "}
+        for{" "}
+        <Text
+          className={inputClassName}
+          editable={{
+            triggerType,
+            onChange: (value) =>
+              setYears(Math.floor(parseCurrency(value)) || 1),
+            enterIcon: null,
+          }}
+        >
+          {formatNumber(years)}
+        </Text>{" "}
+        years;
+      </Paragraph>
+      <Paragraph>
         With an annual interest rate of{" "}
-        <InputNumber
-          value={returnRate}
-          onChange={(value) => setReturnRate(value || 0)}
-          min={0}
-          {...inputNumberProps}
-        />
-        % compounded{" "}
+        <Text
+          className={inputClassName}
+          editable={{
+            triggerType,
+            onChange: (value) => setReturnRate(parseCurrency(value) || 0),
+            enterIcon: null,
+          }}
+        >
+          {formatPercentage(returnRate)}
+        </Text>
+        {" compounded "}
         <Select
           value={compoundFrequency}
           onChange={(value) => setCompoundFrequency(value)}
@@ -125,16 +146,21 @@ export default function InvestmentForm({
           ]}
           {...selectProps}
         />
-      </li>
-      <li>
+      </Paragraph>
+      <Paragraph>
         And adding{" "}
-        <InputNumber
-          value={additionalContribution}
-          onChange={(value) => setAdditionalContribution(value || 0)}
-          {...currencyInputProps}
-        />
-        {currencySymbol + " "}
-        at the{" "}
+        <Text
+          className={inputClassName}
+          editable={{
+            triggerType,
+            onChange: (value) =>
+              setAdditionalContribution(parseCurrency(value)),
+            enterIcon: null,
+          }}
+        >
+          {formatCurrency(additionalContribution)}
+        </Text>
+        {" at the "}
         <Select
           value={contributionTiming}
           onChange={(value) => setContributionTiming(value)}
@@ -144,7 +170,7 @@ export default function InvestmentForm({
           ]}
           {...selectProps}
         />
-        of each{" "}
+        {" of each "}
         <Select
           value={contributionFrequency}
           onChange={(value) => setContributionFrequency(value)}
@@ -154,7 +180,8 @@ export default function InvestmentForm({
           ]}
           {...selectProps}
         />
-      </li>
-    </ul>
+      </Paragraph>
+      <Paragraph>Results in</Paragraph>
+    </div>
   );
 }
