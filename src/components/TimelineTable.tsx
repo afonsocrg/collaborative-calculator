@@ -1,57 +1,67 @@
-import { useState } from 'react';
-import { Table, Card, Switch } from 'antd';
-import type { ColumnsType } from 'antd/es/table';
-import { TimelineEntry } from '../types/calculator';
-import { aggregateTimelineByYear } from '../utils/timelineAggregation';
+import { Card, Switch, Table } from "antd";
+import type { ColumnsType } from "antd/es/table";
+import { useState } from "react";
+import { TimelineEntry } from "../types/calculator";
+import { aggregateTimelineByYear } from "../utils/timelineAggregation";
 
 interface TimelineTableProps {
   timeline: TimelineEntry[];
 }
 
 export default function TimelineTable({ timeline }: TimelineTableProps) {
-  const [showMonthly, setShowMonthly] = useState(true);
+  const [showMonthly, setShowMonthly] = useState(false);
 
-  const displayData = showMonthly ? timeline : aggregateTimelineByYear(timeline);
+  const displayData = showMonthly
+    ? timeline
+    : aggregateTimelineByYear(timeline);
 
   const columns: ColumnsType<TimelineEntry> = [
     {
-      title: showMonthly ? 'Month' : 'Year',
-      dataIndex: 'period',
-      key: 'period',
+      title: showMonthly ? "Month" : "Year",
+      dataIndex: "date",
+      render: (value: string) =>
+        new Date(value).toLocaleDateString(undefined, {
+          month: showMonthly ? "short" : undefined,
+          year: "numeric",
+        }),
+      key: "date",
     },
     {
-      title: 'Deposit',
-      dataIndex: 'deposit',
-      key: 'deposit',
-      render: (value: number) => new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }).format(value),
+      title: "Deposit",
+      dataIndex: "deposit",
+      key: "deposit",
+      render: (value: number) =>
+        new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "EUR",
+        }).format(value),
     },
     {
-      title: 'Interest',
-      dataIndex: 'interest',
-      key: 'interest',
-      render: (value: number) => new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }).format(value),
+      title: "Interest",
+      dataIndex: "interest",
+      key: "interest",
+      render: (value: number) =>
+        new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "EUR",
+        }).format(value),
     },
     {
-      title: 'Ending Balance',
-      dataIndex: 'endingBalance',
-      key: 'endingBalance',
-      render: (value: number) => new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-      }).format(value),
+      title: "Total Balance",
+      dataIndex: "endingBalance",
+      key: "endingBalance",
+      render: (value: number) =>
+        new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "EUR",
+        }).format(value),
     },
   ];
 
   return (
     <Card className="mt-8">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-semibold">Accumulation Schedule</h3>
+        <h3 className="text-lg font-semibold">Income Schedule</h3>
         <div className="flex items-center gap-2">
           <span>Show Monthly</span>
           <Switch checked={showMonthly} onChange={setShowMonthly} />
@@ -59,7 +69,10 @@ export default function TimelineTable({ timeline }: TimelineTableProps) {
       </div>
       <Table
         columns={columns}
-        dataSource={displayData.map(entry => ({ ...entry, key: entry.period }))}
+        dataSource={displayData.map((entry) => ({
+          ...entry,
+          key: entry.period,
+        }))}
         pagination={{ pageSize: 10 }}
         scroll={{ x: true }}
       />
