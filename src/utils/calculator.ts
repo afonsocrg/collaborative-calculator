@@ -7,38 +7,14 @@ const getMonthlyRate = (
   annualRate: number,
   compoundFrequency: CompoundFrequency
 ): number =>  {
-
-  
-  // annually: 1,
-  // semiannually: 2,
   const frequencyNumber = getCompoundFrequencyNumber(compoundFrequency);
-  
   const periodRate = annualRate / frequencyNumber;
-  // const periodInterest = Math.pow(1 + annualRate, 1 / frequencyNumber) - 1;
-  
   const nMonthsPerPeriod = 12 / frequencyNumber;
-
-  // This returns if compound anually
-  // const monthlyRate = Math.pow(1 + annualRate, 1/12) - 1;
-
-  // This returns if compound monthly
-  // const monthlyRate = annualRate / 12;
-  
   const monthlyRate = Math.pow(1 + periodRate, 1/nMonthsPerPeriod) - 1
-  console.log({compoundFrequency, frequencyNumber, periodRate, nMonthsPerPeriod, monthlyRate})
-
   return monthlyRate;
 }
 
 const calculateMonthlyInterest = (balance: number, monthlyRate: number): number => {
-  // if (compoundFrequency === Infinity) {
-  //   // For continuous compounding, calculate the monthly effective rate
-  //   // const monthlyRate = annualRate / MONTHS_PER_YEAR;
-  //   const monthlyRate = Math.pow(1 + annualRate, 1/12) - 1
-  //   return balance * (Math.exp(monthlyRate) - 1);
-  // }
-
-  // For other frequencies, calculate the monthly portion of the periodic interest
   return balance * monthlyRate;
 };
 
