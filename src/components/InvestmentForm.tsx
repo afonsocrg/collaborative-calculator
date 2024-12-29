@@ -78,7 +78,7 @@ export default function InvestmentForm({
   setContributionFrequency,
 }: InvestmentFormProps) {
   const triggerType: ("text" | "icon")[] = ["text"];
-  const inputClassName = "font-bold cursor-pointer";
+  const inputClassName = "font-bold underline cursor-pointer";
 
   const selectProps: SelectProps = {
     variant: "borderless",
