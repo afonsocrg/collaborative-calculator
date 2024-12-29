@@ -1,4 +1,4 @@
-import { Select, SelectProps, Typography } from "antd";
+import { Select, SelectProps, Slider, Typography } from "antd";
 import {
   CompoundFrequency,
   ContributionFrequency,
@@ -117,8 +117,8 @@ export default function InvestmentForm({
         </Text>{" "}
         years;
       </Paragraph>
-      <Paragraph>
-        With an annual interest rate of{" "}
+      <Paragraph>With an annual interest rate of</Paragraph>
+      <div className="flex flex-row gap-2 max-w-[50%]">
         <Text
           className={inputClassName}
           editable={{
@@ -129,6 +129,18 @@ export default function InvestmentForm({
         >
           {formatPercentage(returnRate)}
         </Text>
+        <div className="grow">
+          <Slider
+            value={returnRate}
+            onChange={(value) => setReturnRate(value)}
+            min={0}
+            max={25}
+            step={0.1}
+          />
+        </div>
+      </div>
+
+      <Paragraph>
         {" compounded "}
         <Select
           value={compoundFrequency}
