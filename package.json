@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@uidotdev/usehooks": "^2.4.1",
     "antd": "^5.14.2",
     "chart.js": "^4.4.1",
     "locale-currency": "^0.0.2",

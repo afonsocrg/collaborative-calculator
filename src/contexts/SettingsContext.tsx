@@ -1,6 +1,6 @@
-import { useLocalStorage } from "@uidotdev/usehooks";
 import { getCurrency } from "locale-currency";
 import { ReactNode, createContext, useState } from "react";
+import { useStateTogether } from "react-together";
 import { determineLocale } from "../utils/locale";
 
 interface SettingsContextType {
@@ -16,11 +16,17 @@ export const SettingsContext = createContext<SettingsContextType | undefined>(
 );
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
-  const [currency, setCurrency] = useLocalStorage(
-    "currency",
-    getCurrency(determineLocale()) || "USD"
-  );
   const [isOpen, setIsOpen] = useState(false);
+
+  const [currency, _setCurrency] = useStateTogether(
+    "currency",
+    localStorage.getItem("currency") || getCurrency(determineLocale()) || "USD"
+  );
+
+  const setCurrency = (currency: string) => {
+    localStorage.setItem("currency", currency);
+    _setCurrency(currency);
+  };
 
   return (
     <>
