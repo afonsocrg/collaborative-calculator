@@ -1,6 +1,7 @@
 import { GithubOutlined, SettingOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { ReactNode } from "react";
+import { version } from "../../package.json";
 import { useSettings } from "../hooks/useSettings";
 import { SettingsModal } from "./SettingsModal";
 
@@ -13,7 +14,8 @@ export function Layout({ children }: LayoutProps) {
   return (
     <>
       <div className="min-h-screen bg-gray-100">
-        <div className="absolute top-3 right-3 flex flex-row gap-2">
+        <div className="absolute top-3 right-3 flex flex-row gap-2 items-center">
+          <span className="text-xs text-gray-500">v{version}</span>
           <Button
             shape="circle"
             icon={<GithubOutlined />}
