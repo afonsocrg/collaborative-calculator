@@ -1,4 +1,5 @@
-import { Select, SelectProps, Slider, Typography } from "antd";
+import { Avatar, Badge, Select, SelectProps, Slider, Typography } from "antd";
+import { useMyId, useStateTogetherWithPerUserValues } from "react-together";
 import {
   CompoundFrequency,
   ContributionFrequency,
@@ -44,6 +45,106 @@ function parseCurrency(value: string | undefined) {
   return parseFloat(value) ?? 0;
 }
 
+function hashString(str: string) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+
+function getUserColor(userId: string): string {
+  const colors = [
+    "red",
+    "orange",
+    "amber",
+    "yellow",
+    "lime",
+    "green",
+    "emerald",
+    "teal",
+    "cyan",
+    "sky",
+    "blue",
+    "indigo",
+    "violet",
+    "purple",
+    "fuchsia",
+    "pink",
+    "rose",
+  ];
+  const h = hashString(userId);
+  const color = colors[h % colors.length] + "-300";
+  return color;
+}
+
+function PresenceEditableText({
+  rtKey,
+  value,
+  onChange,
+}: {
+  rtKey: string;
+  value: string;
+  onChange: (value: string) => void;
+}) {
+  const myId = useMyId();
+  const [isEditing, setIsEditing, allEditing] =
+    useStateTogetherWithPerUserValues(rtKey, false);
+
+  const othersEditing = Object.entries(allEditing)
+    .filter(([id, editing]) => id !== myId && editing)
+    .map(([id]) => id);
+
+  const triggerType: ("text" | "icon")[] = ["text"];
+  const inputClassName = "font-bold underline cursor-pointer";
+
+  const color = isEditing
+    ? "transparent"
+    : othersEditing.length > 0
+    ? getUserColor(othersEditing[0])
+    : "transparent";
+
+  const borderClassName = `border-solid border-${color} border-2 rounded-md p-1`;
+
+  return (
+    <Badge
+      count={
+        <Avatar.Group max={{ count: 1 }} size={16}>
+          {!isEditing &&
+            othersEditing.map((id) => (
+              <Avatar
+                key={id}
+                size={16}
+                src={`https://api.dicebear.com/9.x/miniavs/svg?seed=${id}&backgroundColor=eeeeee`}
+              />
+            ))}
+        </Avatar.Group>
+      }
+      size="small"
+    >
+      <span className={borderClassName}>
+        <Text
+          className={inputClassName}
+          editable={{
+            triggerType,
+            enterIcon: null,
+            onStart: () => setIsEditing(true),
+            onChange: (v) => {
+              onChange(v);
+              setIsEditing(false);
+            },
+            onEnd: () => setIsEditing(false),
+            onCancel: () => setIsEditing(false),
+          }}
+        >
+          {value}
+        </Text>
+      </span>
+    </Badge>
+  );
+}
+
 interface InvestmentFormProps {
   startingAmount: number;
   setStartingAmount: (value: number) => void;
@@ -60,7 +161,6 @@ interface InvestmentFormProps {
   contributionFrequency: ContributionFrequency;
   setContributionFrequency: (value: ContributionFrequency) => void;
 }
-
 export default function InvestmentForm({
   startingAmount,
   setStartingAmount,
@@ -77,7 +177,6 @@ export default function InvestmentForm({
   contributionFrequency,
   setContributionFrequency,
 }: InvestmentFormProps) {
-  const triggerType: ("text" | "icon")[] = ["text"];
   const inputClassName = "font-bold underline cursor-pointer";
 
   const selectProps: SelectProps = {
@@ -93,42 +192,26 @@ export default function InvestmentForm({
     <div id="investment-form">
       <Paragraph>
         Investing{" "}
-        <Text
-          className={inputClassName}
-          editable={{
-            triggerType,
-            onChange: (value) => setStartingAmount(parseCurrency(value)),
-            enterIcon: null,
-          }}
-        >
-          {formatCurrency(startingAmount)}
-        </Text>{" "}
-        for{" "}
-        <Text
-          className={inputClassName}
-          editable={{
-            triggerType,
-            onChange: (value) =>
-              setYears(Math.floor(parseCurrency(value)) || 1),
-            enterIcon: null,
-          }}
-        >
-          {formatNumber(years)}
-        </Text>{" "}
+        <PresenceEditableText
+          rtKey="starting-amount-presence"
+          value={formatCurrency(startingAmount)}
+          onChange={(value) => setStartingAmount(parseCurrency(value))}
+        />
+        {" for "}
+        <PresenceEditableText
+          rtKey="years-presence"
+          value={formatNumber(years)}
+          onChange={(value) => setYears(Math.floor(parseCurrency(value)) || 1)}
+        />{" "}
         years;
       </Paragraph>
       <Paragraph>With an annual interest rate of</Paragraph>
       <div className="flex flex-row gap-2 max-w-[50%]">
-        <Text
-          className={inputClassName}
-          editable={{
-            triggerType,
-            onChange: (value) => setReturnRate(parseCurrency(value) || 0),
-            enterIcon: null,
-          }}
-        >
-          {formatPercentage(returnRate)}
-        </Text>
+        <PresenceEditableText
+          rtKey="return-rate-presence"
+          value={formatPercentage(returnRate)}
+          onChange={(value) => setReturnRate(parseCurrency(value) || 0)}
+        />
         <div className="grow">
           <Slider
             value={returnRate}
@@ -161,17 +244,11 @@ export default function InvestmentForm({
       </Paragraph>
       <Paragraph>
         And adding{" "}
-        <Text
-          className={inputClassName}
-          editable={{
-            triggerType,
-            onChange: (value) =>
-              setAdditionalContribution(parseCurrency(value)),
-            enterIcon: null,
-          }}
-        >
-          {formatCurrency(additionalContribution)}
-        </Text>
+        <PresenceEditableText
+          rtKey="additional-contribution-presence"
+          value={formatCurrency(additionalContribution)}
+          onChange={(value) => setAdditionalContribution(parseCurrency(value))}
+        />
         {" at the "}
         <Select
           value={contributionTiming}

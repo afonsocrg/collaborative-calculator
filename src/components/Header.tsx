@@ -26,7 +26,7 @@ export function Header() {
       </div>
       {isTogether ? (
         <>
-          <p className="mt-2 text-lg text-gray-600">
+          <p className="mt-2 text-gray-600">
             Invite your friends to this session with the link below:
           </p>
           <p className="mt-2 text-sm max-w-[20rem] mx-auto">
@@ -49,9 +49,18 @@ export function Header() {
           </div>
         </>
       ) : (
-        <Button color="primary" variant="filled" onClick={createRandomSession}>
-          Start a Session!!
-        </Button>
+        <>
+          <p className="mb-2 text-gray-600">
+            Want to collaborate with your friends?
+          </p>
+          <Button
+            color="primary"
+            variant="filled"
+            onClick={createRandomSession}
+          >
+            Start a Session!!
+          </Button>
+        </>
       )}
     </div>
   );
