@@ -1,4 +1,4 @@
-import { SelectProps, Slider, Typography } from "antd";
+import { SelectProps, Typography } from "antd";
 import {
   CompoundFrequency,
   ContributionFrequency,
@@ -12,6 +12,7 @@ import {
 } from "../utils/serde";
 import { PresenceEditableText } from "./PresenceEditableText";
 import { PresenceSelect } from "./PresenceSelect";
+import { PresenceSlider } from "./PresenceSlider";
 
 const { Paragraph } = Typography;
 
@@ -83,7 +84,8 @@ export default function InvestmentForm({
           onChange={(value) => setReturnRate(parseCurrency(value) || 0)}
         />
         <div className="grow">
-          <Slider
+          <PresenceSlider
+            rtKey="return-rate-slider"
             value={returnRate}
             onChange={(value) => setReturnRate(value)}
             min={0}
