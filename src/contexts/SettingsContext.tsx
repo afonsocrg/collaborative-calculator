@@ -20,7 +20,9 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
 
   const [currency, _setCurrency] = useStateTogether(
     "currency",
-    localStorage.getItem("currency") || getCurrency(determineLocale()) || "USD"
+    localStorage.getItem("currency")?.replace(/"/g, "") ||
+      getCurrency(determineLocale()) ||
+      "USD"
   );
 
   const setCurrency = (currency: string) => {
