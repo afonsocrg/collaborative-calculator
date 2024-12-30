@@ -1,10 +1,13 @@
-export function formatCurrency(value: number | undefined) {
+export function formatCurrency(
+  value: number | undefined,
+  currency: string = "USD"
+) {
   if (value === undefined) {
     return "";
   }
   return new Intl.NumberFormat(undefined, {
     style: "currency",
-    currency: "EUR",
+    currency: currency,
   }).format(value);
 }
 

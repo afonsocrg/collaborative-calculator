@@ -1,7 +1,9 @@
 import { Card, Switch, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useState } from "react";
+import { useSettings } from "../hooks/useSettings";
 import { TimelineEntry } from "../types/calculator";
+import { formatCurrency } from "../utils/serde";
 import { aggregateTimelineByYear } from "../utils/timelineAggregation";
 
 interface TimelineTableProps {
@@ -9,6 +11,7 @@ interface TimelineTableProps {
 }
 
 export default function TimelineTable({ timeline }: TimelineTableProps) {
+  const { currency } = useSettings();
   const [showMonthly, setShowMonthly] = useState(false);
 
   const displayData = showMonthly
@@ -17,6 +20,7 @@ export default function TimelineTable({ timeline }: TimelineTableProps) {
 
   const columns: ColumnsType<TimelineEntry> = [
     {
+      key: "date",
       title: showMonthly ? "Month" : "Year",
       dataIndex: "date",
       render: (value: string) =>
@@ -24,37 +28,24 @@ export default function TimelineTable({ timeline }: TimelineTableProps) {
           month: showMonthly ? "short" : undefined,
           year: "numeric",
         }),
-      key: "date",
     },
     {
+      key: "deposit",
       title: "Deposit",
       dataIndex: "deposit",
-      key: "deposit",
-      render: (value: number) =>
-        new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "EUR",
-        }).format(value),
+      render: (value: number) => formatCurrency(value, currency),
     },
     {
+      key: "interest",
       title: "Interest",
       dataIndex: "interest",
-      key: "interest",
-      render: (value: number) =>
-        new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "EUR",
-        }).format(value),
+      render: (value: number) => formatCurrency(value, currency),
     },
     {
+      key: "endingBalance",
       title: "Total Balance",
       dataIndex: "endingBalance",
-      key: "endingBalance",
-      render: (value: number) =>
-        new Intl.NumberFormat("en-US", {
-          style: "currency",
-          currency: "EUR",
-        }).format(value),
+      render: (value: number) => formatCurrency(value, currency),
     },
   ];
 

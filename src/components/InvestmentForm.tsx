@@ -1,4 +1,5 @@
 import { SelectProps, Typography } from "antd";
+import { useSettings } from "../hooks/useSettings";
 import {
   CompoundFrequency,
   ContributionFrequency,
@@ -48,7 +49,10 @@ export default function InvestmentForm({
   contributionFrequency,
   setContributionFrequency,
 }: InvestmentFormProps) {
+  const { currency } = useSettings();
   const inputClassName = "font-bold underline cursor-pointer";
+
+  console.log({ currency });
 
   const selectProps: SelectProps = {
     variant: "borderless",
@@ -65,7 +69,7 @@ export default function InvestmentForm({
         Investing{" "}
         <PresenceEditableText
           rtKey="starting-amount-presence"
-          value={formatCurrency(startingAmount)}
+          value={formatCurrency(startingAmount, currency)}
           onChange={(value) => setStartingAmount(parseCurrency(value))}
         />
         {" for "}
@@ -119,7 +123,7 @@ export default function InvestmentForm({
         And adding{" "}
         <PresenceEditableText
           rtKey="additional-contribution-presence"
-          value={formatCurrency(additionalContribution)}
+          value={formatCurrency(additionalContribution, currency)}
           onChange={(value) => setAdditionalContribution(parseCurrency(value))}
         />
         {" at the "}
