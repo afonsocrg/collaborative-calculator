@@ -1,4 +1,4 @@
-import { SettingOutlined } from "@ant-design/icons";
+import { GithubOutlined, SettingOutlined } from "@ant-design/icons";
 import { Button } from "antd";
 import { ReactNode } from "react";
 import { useSettings } from "../hooks/useSettings";
@@ -13,7 +13,15 @@ export function Layout({ children }: LayoutProps) {
   return (
     <>
       <div className="min-h-screen bg-gray-100">
-        <div className="absolute top-3 right-3">
+        <div className="absolute top-3 right-3 flex flex-row gap-2">
+          <Button
+            shape="circle"
+            icon={<GithubOutlined />}
+            href="https://github.com/afonsocrg/collaborative-calculator"
+            target="_blank"
+            color="default"
+            variant="filled"
+          />
           <Button
             shape="circle"
             icon={<SettingOutlined />}
