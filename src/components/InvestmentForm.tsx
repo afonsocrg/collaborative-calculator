@@ -99,22 +99,20 @@ export default function InvestmentForm({
         {" compounded "}
         <PresenceSelect
           rtKey="compound-frequency-presence"
-          selectProps={{
-            value: compoundFrequency,
-            onChange: (value) => setCompoundFrequency(value),
-            options: [
-              { value: "annually", label: "annually" },
-              { value: "semiannually", label: "semiannually" },
-              { value: "quarterly", label: "quarterly" },
-              { value: "monthly", label: "monthly" },
-              { value: "semimonthly", label: "semi-monthly" },
-              { value: "biweekly", label: "bi-weekly" },
-              { value: "weekly", label: "weekly" },
-              { value: "daily", label: "daily" },
-              { value: "continuously", label: "continuously" },
-            ],
-            ...selectProps,
-          }}
+          value={compoundFrequency}
+          onChange={(value) => setCompoundFrequency(value)}
+          options={[
+            { value: "annually", label: "annually" },
+            { value: "semiannually", label: "semiannually" },
+            { value: "quarterly", label: "quarterly" },
+            { value: "monthly", label: "monthly" },
+            { value: "semimonthly", label: "semi-monthly" },
+            { value: "biweekly", label: "bi-weekly" },
+            { value: "weekly", label: "weekly" },
+            { value: "daily", label: "daily" },
+            { value: "continuously", label: "continuously" },
+          ]}
+          {...selectProps}
         />
       </Paragraph>
       <Paragraph>
@@ -127,28 +125,24 @@ export default function InvestmentForm({
         {" at the "}
         <PresenceSelect
           rtKey="contribution-timing-presence"
-          selectProps={{
-            value: contributionTiming,
-            onChange: (value) => setContributionTiming(value),
-            options: [
-              { value: "beginning", label: "beginning" },
-              { value: "end", label: "end" },
-            ],
-            ...selectProps,
-          }}
+          value={contributionTiming}
+          onChange={(value) => setContributionTiming(value)}
+          options={[
+            { value: "beginning", label: "beginning" },
+            { value: "end", label: "end" },
+          ]}
+          {...selectProps}
         />
         {" of each "}
         <PresenceSelect
           rtKey="contribution-frequency-presence"
-          selectProps={{
-            value: contributionFrequency,
-            onChange: (value) => setContributionFrequency(value),
-            options: [
-              { value: "month", label: "month" },
-              { value: "year", label: "year" },
-            ],
-            ...selectProps,
-          }}
+          value={contributionFrequency}
+          onChange={(value) => setContributionFrequency(value)}
+          options={[
+            { value: "month", label: "month" },
+            { value: "year", label: "year" },
+          ]}
+          {...selectProps}
         />
       </Paragraph>
       <Paragraph>Results in</Paragraph>

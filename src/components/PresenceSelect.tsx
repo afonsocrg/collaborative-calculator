@@ -1,14 +1,11 @@
-import { Avatar, Badge, Select, SelectProps } from "antd";
+import { SelectProps as AntdSelectProps, Avatar, Badge, Select } from "antd";
 import { useMyId, useStateTogetherWithPerUserValues } from "react-together";
 import { getUserColor } from "../utils/random";
 
-export function PresenceSelect({
-  rtKey,
-  selectProps,
-}: {
+interface SelectProps extends AntdSelectProps {
   rtKey: string;
-  selectProps: SelectProps;
-}) {
+}
+export function PresenceSelect({ rtKey, ...selectProps }: SelectProps) {
   const myId = useMyId();
   const [isEditing, setIsEditing, allEditing] =
     useStateTogetherWithPerUserValues(rtKey, false);
