@@ -4,7 +4,7 @@ A collaborative web application that allows users to calculate and visualize inv
 
 👉 [calculator.afonsocrg.com](https://calculator.afonsocrg.com):
 
-[![Thumbnail](./thumbnail.png)](https://calculator.afonsocrg.com)
+![Thumbnail](./thumbnail.png)
 
 
 ## Running locally
