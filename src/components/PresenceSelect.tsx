@@ -1,6 +1,6 @@
-import { SelectProps as AntdSelectProps, Avatar, Badge, Select } from "antd";
+import { SelectProps as AntdSelectProps, Select } from "antd";
 import { useMyId, useStateTogetherWithPerUserValues } from "react-together";
-import { getUserColor } from "../utils/random";
+import { UserHighlighter } from "./UserHighlighter";
 
 interface SelectProps extends AntdSelectProps {
   rtKey: string;
@@ -14,36 +14,12 @@ export function PresenceSelect({ rtKey, ...selectProps }: SelectProps) {
     .filter(([id, editing]) => id !== myId && editing)
     .map(([id]) => id);
 
-  const color = isEditing
-    ? "transparent"
-    : othersEditing.length > 0
-    ? getUserColor(othersEditing[0])
-    : "transparent";
-
-  const borderClassName = `border-solid border-${color} border-2 rounded-md p-1`;
-
   return (
-    <Badge
-      count={
-        <Avatar.Group max={{ count: 1 }} size={16}>
-          {!isEditing &&
-            othersEditing.map((id) => (
-              <Avatar
-                key={id}
-                size={16}
-                src={`https://api.dicebear.com/9.x/miniavs/svg?seed=${id}&backgroundColor=eeeeee`}
-              />
-            ))}
-        </Avatar.Group>
-      }
-      size="small"
-    >
-      <span className={borderClassName}>
-        <Select
-          onDropdownVisibleChange={(open) => setIsEditing(open)}
-          {...selectProps}
-        />
-      </span>
-    </Badge>
+    <UserHighlighter highlight={!isEditing} userIds={othersEditing}>
+      <Select
+        onDropdownVisibleChange={(open) => setIsEditing(open)}
+        {...selectProps}
+      />
+    </UserHighlighter>
   );
 }
