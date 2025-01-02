@@ -11,6 +11,7 @@ import {
 import { Bar, Pie } from "react-chartjs-2";
 import { useMyId, useStateTogetherWithPerUserValues } from "react-together";
 import { CalculationResult } from "../types/calculator";
+import { getUserAvatarUrl } from "../utils/users";
 
 ChartJS.register(
   ArcElement,
@@ -159,11 +160,7 @@ function PresenceLabel({ label, userIds }: PresenceLabelProps) {
       <span>{label}</span>
       <Avatar.Group>
         {userIds.map((userId) => (
-          <Avatar
-            key={userId}
-            src={`https://api.dicebear.com/9.x/miniavs/svg?seed=${userId}`}
-            size={20}
-          />
+          <Avatar key={userId} src={getUserAvatarUrl(userId)} size={20} />
         ))}
       </Avatar.Group>
     </div>

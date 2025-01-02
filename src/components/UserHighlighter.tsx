@@ -1,5 +1,5 @@
 import { Avatar, Badge } from "antd";
-import { getUserColor } from "../utils/random";
+import { getUserAvatarUrl, getUserColor } from "../utils/users";
 
 interface UserHighlighterProps {
   highlight: boolean;
@@ -11,6 +11,7 @@ export function UserHighlighter({
   userIds,
   children,
 }: UserHighlighterProps) {
+  const avatarSize = 16;
   const color =
     highlight && userIds.length > 0 ? getUserColor(userIds[0]) : "transparent";
 
@@ -18,13 +19,9 @@ export function UserHighlighter({
     <Badge
       count={
         highlight ? (
-          <Avatar.Group max={{ count: 1 }} size={16}>
+          <Avatar.Group max={{ count: 1 }} size={avatarSize}>
             {userIds.map((id) => (
-              <Avatar
-                key={id}
-                size={16}
-                src={`https://api.dicebear.com/9.x/miniavs/svg?seed=${id}&backgroundColor=eeeeee`}
-              />
+              <Avatar key={id} size={avatarSize} src={getUserAvatarUrl(id)} />
             ))}
           </Avatar.Group>
         ) : null

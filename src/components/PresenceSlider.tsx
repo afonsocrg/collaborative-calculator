@@ -1,5 +1,6 @@
 import { Avatar, Slider, SliderSingleProps } from "antd";
 import { useMyId, useStateTogetherWithPerUserValues } from "react-together";
+import { getUserAvatarUrl } from "../utils/users";
 
 interface SliderProps extends SliderSingleProps {
   rtKey: string;
@@ -22,11 +23,7 @@ export function PresenceSlider({ rtKey, ...sliderProps }: SliderProps) {
             <Avatar.Group max={{ count: 3 }} size={16}>
               {!isEditing &&
                 othersEditing.map((id) => (
-                  <Avatar
-                    key={id}
-                    size={16}
-                    src={`https://api.dicebear.com/9.x/miniavs/svg?seed=${id}&backgroundColor=eeeeee`}
-                  />
+                  <Avatar key={id} size={16} src={getUserAvatarUrl(id)} />
                 ))}
             </Avatar.Group>
           ),
