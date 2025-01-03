@@ -6,6 +6,7 @@ A collaborative web application that allows users to calculate and visualize inv
 
 ![Thumbnail](./thumbnail.png)
 
+Wondering how this was built? Checkout this [blog post](https://dev.to/afonsocrg/add-real-time-collaboration-to-your-react-app-in-10-minutes-4j55).
 
 ## Running locally
 
