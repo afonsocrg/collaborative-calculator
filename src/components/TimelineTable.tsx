@@ -1,6 +1,6 @@
 import { Card, Switch, Table } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import { useState } from "react";
+import { useStateTogether } from "react-together";
 import { useSettings } from "../hooks/useSettings";
 import { TimelineEntry } from "../types/calculator";
 import { formatCurrency } from "../utils/serde";
@@ -12,7 +12,9 @@ interface TimelineTableProps {
 
 export default function TimelineTable({ timeline }: TimelineTableProps) {
   const { currency } = useSettings();
-  const [showMonthly, setShowMonthly] = useState(false);
+  const [showMonthly, setShowMonthly] = useStateTogether("show-monthly", false);
+  const [page, setPage] = useStateTogether("table-page", 1);
+  const [pageSize, setPageSize] = useStateTogether("table-page-size", 10);
 
   const displayData = showMonthly
     ? timeline
@@ -49,6 +51,8 @@ export default function TimelineTable({ timeline }: TimelineTableProps) {
     },
   ];
 
+  console.log({ page, pageSize });
+
   return (
     <Card className="mt-8">
       <div className="flex justify-between items-center mb-4">
@@ -64,7 +68,16 @@ export default function TimelineTable({ timeline }: TimelineTableProps) {
           ...entry,
           key: entry.period,
         }))}
-        pagination={{}}
+        pagination={{
+          current: page,
+          pageSize: pageSize,
+          pageSizeOptions: [10, 20, 50, 100],
+          showSizeChanger: true,
+          onChange: (page, pageSize) => {
+            setPage(page);
+            setPageSize(pageSize);
+          },
+        }}
         scroll={{ x: true }}
       />
     </Card>
