@@ -27,6 +27,10 @@ function adjustYears(value: number) {
   return putInRange(Math.floor(value), 1, MAX_YEARS);
 }
 
+function adjustReturnRate(value: number) {
+  return putInRange(value, 0, 25);
+}
+
 interface InvestmentFormProps {
   startingAmount: number;
   setStartingAmount: (value: number) => void;
@@ -93,13 +97,15 @@ export default function InvestmentForm({
         <PresenceEditableText
           rtKey="return-rate-presence"
           value={formatPercentage(returnRate)}
-          onChange={(value) => setReturnRate(parseCurrency(value) || 0)}
+          onChange={(value) =>
+            setReturnRate(adjustReturnRate(parseCurrency(value) || 0))
+          }
         />
         <div className="grow">
           <PresenceSlider
             rtKey="return-rate-slider"
             value={returnRate}
-            onChange={(value) => setReturnRate(value)}
+            onChange={(value) => setReturnRate(adjustReturnRate(value))}
             min={0}
             max={25}
             step={0.1}
