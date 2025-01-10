@@ -17,6 +17,16 @@ import { PresenceSlider } from "./PresenceSlider";
 
 const { Paragraph } = Typography;
 
+const MAX_YEARS = 75;
+
+function putInRange(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
+}
+
+function adjustYears(value: number) {
+  return putInRange(Math.floor(value), 1, MAX_YEARS);
+}
+
 interface InvestmentFormProps {
   startingAmount: number;
   setStartingAmount: (value: number) => void;
@@ -74,7 +84,7 @@ export default function InvestmentForm({
         <PresenceEditableText
           rtKey="years-presence"
           value={formatNumber(years)}
-          onChange={(value) => setYears(Math.floor(parseCurrency(value)) || 1)}
+          onChange={(value) => setYears(adjustYears(parseCurrency(value)))}
         />{" "}
         years;
       </Paragraph>
