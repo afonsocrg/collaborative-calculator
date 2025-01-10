@@ -51,8 +51,6 @@ export default function TimelineTable({ timeline }: TimelineTableProps) {
     },
   ];
 
-  console.log({ page, pageSize });
-
   return (
     <Card className="mt-8">
       <div className="flex justify-between items-center mb-4">
