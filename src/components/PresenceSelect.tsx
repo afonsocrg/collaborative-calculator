@@ -1,17 +1,16 @@
 import { SelectProps as AntdSelectProps, Select } from "antd";
-import { useMyId, useStateTogetherWithPerUserValues } from "react-together";
+import { useStateTogetherWithPerUserValues } from "react-together";
 import { UserHighlighter } from "./UserHighlighter";
 
 interface SelectProps extends AntdSelectProps {
   rtKey: string;
 }
 export function PresenceSelect({ rtKey, ...selectProps }: SelectProps) {
-  const myId = useMyId();
   const [isEditing, setIsEditing, allEditing] =
-    useStateTogetherWithPerUserValues(rtKey, false);
+    useStateTogetherWithPerUserValues(rtKey, false, { omitMyValue: true });
 
   const othersEditing = Object.entries(allEditing)
-    .filter(([id, editing]) => id !== myId && editing)
+    .filter(([, editing]) => editing)
     .map(([id]) => id);
 
   return (

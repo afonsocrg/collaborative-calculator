@@ -1,5 +1,5 @@
 import { Typography } from "antd";
-import { useMyId, useStateTogetherWithPerUserValues } from "react-together";
+import { useStateTogetherWithPerUserValues } from "react-together";
 import { UserHighlighter } from "./UserHighlighter";
 
 const { Text } = Typography;
@@ -14,12 +14,11 @@ export function PresenceEditableText({
   value,
   onChange,
 }: PresenceEditableTextProps) {
-  const myId = useMyId();
   const [isEditing, setIsEditing, allEditing] =
-    useStateTogetherWithPerUserValues(rtKey, false);
+    useStateTogetherWithPerUserValues(rtKey, false, { omitMyValue: true });
 
   const othersEditing = Object.entries(allEditing)
-    .filter(([id, editing]) => id !== myId && editing)
+    .filter(([, editing]) => editing)
     .map(([id]) => id);
 
   const triggerType: ("text" | "icon")[] = ["text"];

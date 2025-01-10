@@ -9,7 +9,7 @@ import {
   Tooltip,
 } from "chart.js";
 import { Bar, Pie } from "react-chartjs-2";
-import { useMyId, useStateTogetherWithPerUserValues } from "react-together";
+import { useStateTogetherWithPerUserValues } from "react-together";
 import { CalculationResult } from "../types/calculator";
 import { getUserAvatarUrl } from "../utils/users";
 
@@ -169,8 +169,9 @@ function PresenceLabel({ label, userIds }: PresenceLabelProps) {
 
 export default function Charts({ results }: ChartsProps) {
   const [activeKey, setActiveKey, allActiveKeys] =
-    useStateTogetherWithPerUserValues("active-keys", "1");
-  const myId = useMyId();
+    useStateTogetherWithPerUserValues("active-keys", "1", {
+      omitMyValue: true,
+    });
 
   const tabs = [
     {
@@ -195,7 +196,7 @@ export default function Charts({ results }: ChartsProps) {
           <PresenceLabel
             label={label}
             userIds={Object.keys(allActiveKeys).filter(
-              (id) => id !== myId && allActiveKeys[id] === key
+              (id) => allActiveKeys[id] === key
             )}
           />
         ),
