@@ -82,7 +82,7 @@ function getBarData(results: CalculationResult) {
 function BarChart({ results }: ChartsProps) {
   const barData = getBarData(results);
   return (
-    <div className="h-[300px] relative">
+    <div className="h-[300px] relative text-gray-900">
       <Bar
         data={barData}
         options={{

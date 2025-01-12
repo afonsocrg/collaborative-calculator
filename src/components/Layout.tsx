@@ -1,5 +1,5 @@
 import { GithubOutlined, SettingOutlined } from "@ant-design/icons";
-import { Button } from "antd";
+import { Button, Switch } from "antd";
 import { ReactNode } from "react";
 import { version } from "../../package.json";
 import { useSettings } from "../hooks/useSettings";
@@ -9,13 +9,19 @@ interface LayoutProps {
   children: ReactNode;
 }
 export function Layout({ children }: LayoutProps) {
-  const { openSettings } = useSettings();
+  const { openSettings, isDarkMode, setIsDarkMode } = useSettings();
+
+  console.log(isDarkMode);
 
   return (
     <>
-      <div className="min-h-screen bg-gray-100">
-        <div className="absolute top-3 right-3 flex flex-row gap-2 items-center">
+      <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div className="flex flex-row gap-2 items-center justify-end py-2 px-2">
           <span className="text-xs text-gray-500">v{version}</span>
+          <Switch
+            checked={isDarkMode}
+            onChange={(checked) => setIsDarkMode(checked)}
+          />
           <Button
             shape="circle"
             icon={<GithubOutlined />}
@@ -32,7 +38,7 @@ export function Layout({ children }: LayoutProps) {
             onClick={openSettings}
           />
         </div>
-        <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             {children}
             <SettingsModal />

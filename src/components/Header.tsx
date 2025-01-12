@@ -14,19 +14,17 @@ export function Header() {
   const joinUrl = useJoinUrl();
 
   return (
-    <div className="text-center mb-12">
+    <div className="text-center mb-12 text-gray-600 dark:text-gray-400">
       <div className="mb-4">
-        <h1 className="text-4xl font-bold text-gray-900 flex items-center justify-center gap-3">
-          <CalculatorIcon className="h-10 w-10 text-blue-600" />
+        <h1 className="flex items-center justify-center gap-3 text-4xl font-bold text-gray-900 dark:text-gray-300">
+          <CalculatorIcon className="h-10 w-10 text-blue-600 dark:text-blue-400" />
           Collaborative Investment Simulator
         </h1>
-        <p className="mt-2 text-xl text-gray-600">
-          Plan your financial future... Together!
-        </p>
+        <p className="mt-2 text-xl">Plan your financial future... Together!</p>
       </div>
       {isTogether ? (
         <>
-          <p className="mt-2 text-gray-600">
+          <p className="mt-2">
             Invite your friends to this session with the link below:
           </p>
           <p className="mt-2 text-sm max-w-[20rem] mx-auto">
@@ -50,9 +48,7 @@ export function Header() {
         </>
       ) : (
         <>
-          <p className="mb-2 text-gray-600">
-            Want to collaborate with your friends?
-          </p>
+          <p className="mb-2">Want to collaborate with your friends?</p>
           <Button
             color="primary"
             variant="filled"
