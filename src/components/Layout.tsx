@@ -11,8 +11,6 @@ interface LayoutProps {
 export function Layout({ children }: LayoutProps) {
   const { openSettings, isDarkMode, setIsDarkMode } = useSettings();
 
-  console.log(isDarkMode);
-
   return (
     <>
       <div className="min-h-screen bg-gray-100 dark:bg-gray-900">

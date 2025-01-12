@@ -1,4 +1,4 @@
-import { Avatar, Tabs } from "antd";
+import { Avatar, Tabs, theme } from "antd";
 import {
   ArcElement,
   BarElement,
@@ -10,8 +10,12 @@ import {
 } from "chart.js";
 import { Bar, Pie } from "react-chartjs-2";
 import { useStateTogetherWithPerUserValues } from "react-together";
+import colors from "tailwindcss/colors";
+import { useSettings } from "../hooks/useSettings";
 import { CalculationResult } from "../types/calculator";
 import { getUserAvatarUrl } from "../utils/users";
+
+const { useToken } = theme;
 
 ChartJS.register(
   ArcElement,
@@ -26,7 +30,19 @@ interface ChartsProps {
   results: CalculationResult;
 }
 
-function getBarData(results: CalculationResult) {
+const lightModeLightness = 400;
+const darkModeLightness = 500;
+
+const purple = colors.violet[lightModeLightness];
+const darkModePurple = colors.violet[darkModeLightness];
+
+const blue = colors.blue[lightModeLightness];
+const darkModeBlue = colors.blue[darkModeLightness];
+
+const green = colors.teal[lightModeLightness];
+const darkModeGreen = colors.teal[darkModeLightness];
+
+function getBarData(results: CalculationResult, isDarkMode: boolean) {
   const timelineData = results.timeline.map((entry, index) => {
     const previousContributions =
       index > 0
@@ -61,26 +77,28 @@ function getBarData(results: CalculationResult) {
       {
         label: "Initial Investment",
         data: timelineData.map((entry) => entry.startingAmount),
-        backgroundColor: "rgba(54, 162, 235, 0.8)",
+        backgroundColor: isDarkMode ? darkModeBlue : blue,
       },
       {
         label: "Contributions",
         data: timelineData.map(
           (entry) => entry.contributions - entry.startingAmount
         ),
-        backgroundColor: "rgba(75, 192, 192, 0.8)",
+        backgroundColor: isDarkMode ? darkModeGreen : green,
       },
       {
         label: "Interest",
         data: timelineData.map((entry) => entry.interest),
-        backgroundColor: "rgba(153, 102, 255, 0.8)",
+        backgroundColor: isDarkMode ? darkModePurple : purple,
       },
     ],
   };
 }
 
 function BarChart({ results }: ChartsProps) {
-  const barData = getBarData(results);
+  const { isDarkMode } = useSettings();
+  const { token } = useToken();
+  const barData = getBarData(results, isDarkMode);
   return (
     <div className="h-[300px] relative text-gray-900">
       <Bar
@@ -97,6 +115,11 @@ function BarChart({ results }: ChartsProps) {
             },
           },
           plugins: {
+            legend: {
+              labels: {
+                color: token.colorText,
+              },
+            },
             tooltip: {
               callbacks: {
                 label: function (context) {
@@ -115,7 +138,7 @@ function BarChart({ results }: ChartsProps) {
   );
 }
 
-function getPieData(results: CalculationResult) {
+function getPieData(results: CalculationResult, isDarkMode: boolean) {
   return {
     labels: ["Initial Investment", "Total Contributions", "Total Interest"],
     datasets: [
@@ -126,14 +149,14 @@ function getPieData(results: CalculationResult) {
           results.totalInterest,
         ],
         backgroundColor: [
-          "rgba(54, 162, 235, 0.8)",
-          "rgba(75, 192, 192, 0.8)",
-          "rgba(153, 102, 255, 0.8)",
+          isDarkMode ? darkModeBlue : blue,
+          isDarkMode ? darkModeGreen : green,
+          isDarkMode ? darkModePurple : purple,
         ],
         borderColor: [
-          "rgba(54, 162, 235, 1)",
-          "rgba(75, 192, 192, 1)",
-          "rgba(153, 102, 255, 1)",
+          isDarkMode ? darkModeBlue : blue,
+          isDarkMode ? darkModeGreen : green,
+          isDarkMode ? darkModePurple : purple,
         ],
         borderWidth: 1,
       },
@@ -142,10 +165,24 @@ function getPieData(results: CalculationResult) {
 }
 
 function PieChart({ results }: ChartsProps) {
-  const pieData = getPieData(results);
+  const { isDarkMode } = useSettings();
+  const { token } = useToken();
+  const pieData = getPieData(results, isDarkMode);
   return (
     <div className="h-[300px] relative">
-      <Pie data={pieData} options={{ maintainAspectRatio: false }} />
+      <Pie
+        data={pieData}
+        options={{
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              labels: {
+                color: token.colorText,
+              },
+            },
+          },
+        }}
+      />
     </div>
   );
 }
