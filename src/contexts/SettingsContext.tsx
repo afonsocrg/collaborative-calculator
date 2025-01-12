@@ -13,6 +13,7 @@ interface SettingsContextType {
   closeSettings: () => void;
   isSettingsOpen: boolean;
   isDarkMode: boolean;
+  isDarkModeValue: boolean | null;
   setIsDarkMode: (isDarkMode: boolean | null) => void;
 }
 
@@ -24,7 +25,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   const [isOpen, setIsOpen] = useState(false);
 
   // null means system default
-  const [isDarkMode, setIsDarkMode] = useLocalStorage<boolean | null>(
+  const [isDarkModeValue, setIsDarkMode] = useLocalStorage<boolean | null>(
     "isDarkMode",
     null
   );
@@ -42,7 +43,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    if (isDarkMode === null) {
+    if (isDarkModeValue === null) {
       const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
       const handleChange = (e: MediaQueryListEvent) => {
         document.documentElement.classList.toggle("dark", e.matches);
@@ -52,9 +53,14 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       mediaQuery.addEventListener("change", handleChange);
       return () => mediaQuery.removeEventListener("change", handleChange);
     } else {
-      document.documentElement.classList.toggle("dark", isDarkMode);
+      document.documentElement.classList.toggle("dark", isDarkModeValue);
     }
-  }, [isDarkMode]);
+  }, [isDarkModeValue]);
+
+  const isDarkMode =
+    isDarkModeValue === null
+      ? window.matchMedia("(prefers-color-scheme: dark)").matches
+      : isDarkModeValue;
 
   return (
     <ConfigProvider
@@ -118,7 +124,8 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
           openSettings: () => setIsOpen(true),
           closeSettings: () => setIsOpen(false),
           isSettingsOpen: isOpen,
-          isDarkMode: isDarkMode === null ? false : isDarkMode,
+          isDarkMode,
+          isDarkModeValue,
           setIsDarkMode,
         }}
       >

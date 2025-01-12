@@ -19,8 +19,6 @@ export function UserHighlighter({
       ? getUserColor(userIds[0], isDarkMode)
       : "transparent";
 
-  console.log(color);
-
   return (
     <Badge
       count={
