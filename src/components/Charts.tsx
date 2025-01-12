@@ -108,10 +108,16 @@ function BarChart({ results }: ChartsProps) {
           scales: {
             x: {
               stacked: true,
+              ticks: {
+                color: isDarkMode ? colors.gray[400] : colors.gray[900],
+              },
             },
             y: {
               stacked: true,
               beginAtZero: true,
+              ticks: {
+                color: isDarkMode ? colors.gray[400] : colors.gray[900],
+              },
             },
           },
           plugins: {
