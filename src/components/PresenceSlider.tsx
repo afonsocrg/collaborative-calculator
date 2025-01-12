@@ -1,12 +1,16 @@
-import { Avatar, Slider, SliderSingleProps } from "antd";
+import { Avatar, Slider, SliderSingleProps, theme } from "antd";
 import { useStateTogetherWithPerUserValues } from "react-together";
 import { getUserAvatarUrl } from "../utils/users";
+
+const { useToken } = theme;
 
 interface SliderProps extends SliderSingleProps {
   rtKey: string;
 }
 
 export function PresenceSlider({ rtKey, ...sliderProps }: SliderProps) {
+  const { token } = useToken();
+
   const [isEditing, setIsEditing, allEditing] =
     useStateTogetherWithPerUserValues(rtKey, false, { omitMyValue: true });
 
@@ -27,13 +31,15 @@ export function PresenceSlider({ rtKey, ...sliderProps }: SliderProps) {
             </Avatar.Group>
           ),
         }
-      : undefined;
+      : {
+          open: false,
+        };
 
   return (
     <Slider
       styles={{
         track: {
-          backgroundColor: othersEditing.length > 0 ? "#1677ff" : undefined,
+          backgroundColor: token.colorPrimary,
         },
       }}
       tooltip={tooltip}

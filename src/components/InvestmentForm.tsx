@@ -64,7 +64,7 @@ export default function InvestmentForm({
   setContributionFrequency,
 }: InvestmentFormProps) {
   const { currency } = useSettings();
-  const inputClassName = "font-bold underline cursor-pointer";
+  const inputClassName = "font-semibold underline cursor-pointer";
 
   const selectProps: SelectProps = {
     variant: "borderless",

@@ -1,4 +1,5 @@
 import { Avatar, Badge } from "antd";
+import { useSettings } from "../hooks/useSettings";
 import { getUserAvatarUrl, getUserColor } from "../utils/users";
 
 interface UserHighlighterProps {
@@ -11,9 +12,14 @@ export function UserHighlighter({
   userIds,
   children,
 }: UserHighlighterProps) {
+  const { isDarkMode } = useSettings();
   const avatarSize = 16;
   const color =
-    highlight && userIds.length > 0 ? getUserColor(userIds[0]) : "transparent";
+    highlight && userIds.length > 0
+      ? getUserColor(userIds[0], isDarkMode)
+      : "transparent";
+
+  console.log(color);
 
   return (
     <Badge

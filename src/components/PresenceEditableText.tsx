@@ -22,7 +22,7 @@ export function PresenceEditableText({
     .map(([id]) => id);
 
   const triggerType: ("text" | "icon")[] = ["text"];
-  const inputClassName = "font-bold underline cursor-pointer";
+  const inputClassName = "font-semibold underline cursor-pointer";
 
   return (
     <UserHighlighter highlight={!isEditing} userIds={othersEditing}>

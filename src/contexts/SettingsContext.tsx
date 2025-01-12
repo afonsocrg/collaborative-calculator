@@ -80,7 +80,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
           colorBgElevated: isDarkMode ? colors.gray[900] : colors.white,
 
           // Text colors
-          colorText: isDarkMode ? colors.gray[300] : colors.gray[900],
+          colorText: isDarkMode ? colors.gray[300] : colors.gray[800],
           colorTextSecondary: isDarkMode ? colors.gray[400] : colors.gray[600],
 
           // Border colors
@@ -92,11 +92,20 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
         },
         components: {
           Button: {
-            primaryColor: isDarkMode ? colors.blue[300] : colors.blue[500],
+            primaryColor: isDarkMode ? colors.blue[400] : colors.blue[500],
             defaultBg: isDarkMode ? colors.gray[800] : colors.white,
           },
           Input: {
             colorBgContainer: isDarkMode ? colors.gray[800] : colors.white,
+          },
+          Slider: {
+            colorPrimary: isDarkMode ? colors.blue[400] : colors.blue[500],
+            // dotActiveBorderColor: isDarkMode
+            //   ? colors.blue[400]
+            //   : colors.red[500],
+          },
+          Select: {
+            optionSelectedFontWeight: isDarkMode ? 600 : 600,
           },
           // Add more component-specific customizations as needed
         },

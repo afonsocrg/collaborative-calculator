@@ -14,13 +14,13 @@ export function Chat() {
   }
 
   return (
-    <div className="rounded-t-xl border bg-card text-card-foreground shadow fixed bottom-0 right-4 bg-white">
+    <div className="rounded-t-xl border bg-card text-card-foreground shadow fixed bottom-0 right-4 bg-white dark:bg-gray-900 dark:border-gray-700 dark:text-gray-200">
       <div onClick={() => setOpen(!open)}>
         <ChatHeader />
       </div>
       {open && (
         <>
-          <div className="border-t border-gray-200">
+          <div className="border-t border-gray-200 dark:border-gray-700">
             <MessageList messages={messages} />
           </div>
           <ChatFooter

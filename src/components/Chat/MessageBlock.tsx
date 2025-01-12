@@ -23,7 +23,7 @@ export function MessageBlock({ senderId, messages }: MessageGroup) {
 
   const messageBubbleClassName = isMe
     ? `${messageBubbleBaseClass} bg-blue-500 text-white`
-    : `${messageBubbleBaseClass} bg-gray-100`;
+    : `${messageBubbleBaseClass} bg-gray-100 dark:bg-gray-800`;
   return (
     <div className={rowClassName}>
       <span className="relative flex h-5 w-5 shrink-0 overflow-hidden rounded-full">

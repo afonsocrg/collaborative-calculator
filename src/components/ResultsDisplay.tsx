@@ -1,4 +1,5 @@
 import { Statistic } from "antd";
+import colors from "tailwindcss/colors";
 import { useSettings } from "../hooks/useSettings";
 import { CalculationResult } from "../types/calculator";
 import { formatCurrency } from "../utils/serde";
@@ -7,8 +8,17 @@ interface ResultsDisplayProps {
   results: CalculationResult;
 }
 
+const lightModeLightness = 600;
+const darkModeLightness = 300;
+
+const lightModeGreen = colors.green[lightModeLightness];
+const darkModeGreen = colors.green[darkModeLightness];
+
+const lightModeBlue = colors.blue[lightModeLightness];
+const darkModeBlue = colors.blue[darkModeLightness];
+
 export default function ResultsDisplay({ results }: ResultsDisplayProps) {
-  const { currency } = useSettings();
+  const { currency, isDarkMode } = useSettings();
 
   return (
     <div className="mx-auto">
@@ -24,12 +34,14 @@ export default function ResultsDisplay({ results }: ResultsDisplayProps) {
         <Statistic
           title="Total Interest"
           value={formatCurrency(results.totalInterest, currency)}
-          valueStyle={{ color: "#1677ff" }}
+          valueStyle={{ color: isDarkMode ? darkModeBlue : lightModeBlue }}
         />
         <Statistic
           title="Final Balance"
           value={formatCurrency(results.endBalance, currency)}
-          valueStyle={{ color: "#3f8600" }}
+          valueStyle={{
+            color: isDarkMode ? darkModeGreen : lightModeGreen,
+          }}
         />
       </div>
     </div>
